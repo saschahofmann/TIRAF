@@ -85,98 +85,28 @@ def add_colorbar(im, aspect=20, pad_fraction=0.5, **kwargs):
 ##################### Main ###############################
 
 # Input
-phi = np.radians(70)
-n1 = 1.515
+phi = np.radians(70.82)
+n1 = 1.525
 n2 = 1.337
 n3 = 1.45
 n4 = 1.37
 w = 647
 d_m = 4
-# Wave vectors
-plt.figure(2)
-n4 = [1.35, 1.36,1.37, 1.39]
-t = np.linspace(0, 200)
-linestyle = [ 'dashed', 'dashdot', 'solid', 'dotted']
 
-for i in xrange(len(n4)):
-    F = fluorescence(t, w, n1, n2, n3, n4[i], phi, d_m)
-    plt.plot(t,F, c ='black', ls = linestyle[i], label= r'$n_4 = $'+ str(n4[i]))
-
-    
-plt.legend(loc =4)
-plt.xlabel('Distance t [nm]')
-plt.ylabel('Normed Fluorescence Intensity')
-plt.savefig('tiraf_different_n2.pdf', format ='pdf', dpi= 1000)
-
-## Wave vectors
-#plt.figure(2)
-#n3 = [1.41, 1.43,1.45, 1.47]
-#t = np.linspace(0, 200)
-#linestyle = [ 'dashed', 'dashdot', 'solid', 'dotted']
-#
-#for i in xrange(len(n3)):
-#    F = fluorescence(t, w, n1, n2, n3[i], n4, phi, d_m)
-#    plt.plot(t,F, c ='black', ls = linestyle[i], label= r'$n_3 = $'+ str(n3[i]))
-#
-#    
-#plt.legend(loc =4)
-#plt.xlabel('Distance t [nm]')
-#plt.ylabel('Normed Fluorescence Intensity')
-#plt.savefig('tiraf_different_n3.pdf', format ='pdf', dpi= 1000)
-## Wave vectors
-#plt.figure(2)
-#n2 = [1.3, 1.32,1.337, 1.37]
-#t = np.linspace(0, 200)
-#linestyle = [ 'dashed', 'dashdot', 'solid', 'dotted']
-#
-#for i in xrange(len(n2)):
-#    F = fluorescence(t, w, n1, n2[i], n3, n4, phi, d_m)
-#    plt.plot(t,F, c ='black', ls = linestyle[i], label= r'$n_2 = $'+ str(n2[i]))
-#
-#    
-#plt.legend(loc =4)
-#plt.xlabel('Distance t [nm]')
-#plt.ylabel('Normed Fluorescence Intensity')
-#plt.savefig('tiraf_different_n2.pdf', format ='pdf', dpi= 1000)
-
-## Wave vectors
-#plt.figure(2)
-#phi = [np.radians(70), np.radians(75),  np.radians(80), np.radians(85)]
-#t = np.linspace(0, 200)
-#linestyle = ['solid', 'dashed', 'dashdot', 'dotted']
-#degree_sign= u'\N{DEGREE SIGN}'
-#for i in xrange(len(phi)):
-#    F = fluorescence(t, w, n1, n2, n3, n4, phi[i], d_m)
-#    plt.plot(t,F, c ='black', ls = linestyle[i], label= str(int(np.rad2deg(phi[i]))) + r'$^{\circ}$')
-#
-#    
-#plt.legend(loc =4)
-#plt.xlabel('Distance t [nm]')
-#plt.ylabel('Normed Fluorescence Intensity')
-#plt.savefig('tiraf_different_phi.pdf', format ='pdf', dpi= 1000)
-
-#plt.figure(1)
-#t = np.linspace(0, 200)
-#F = fluorescence(t, w, n1, n2, n3, n4, np.radians(72), d_m)
-#
-#plt.xlim((0,200))
-#plt.ylim(0,1)
-#plt.plot(t,F, c ='black',)
-#plt.savefig('tiraf.pdf', format ='pdf', dpi= 1000)
-
-'''
 directory = 'Images/'
-bg_filename = "plm_background.tif"
-cell_filename = 'plm_cell.tif'
+bg_filename = "171017_005_bg.tif"
+cell_filename = '171017_005.tif'
 background = io.imread(directory + bg_filename)
 cell = io.imread(directory + cell_filename)
 corrected = cell/background
 height = np.zeros_like(corrected)
 for i in range(corrected.shape[0]):
+    print i
     for j in range(corrected.shape[1]):
-        func = lambda t: corrected[i,j] - fluorescence(t, w, n1, n2, n3, n4, np.radians(75), d_m)
+        
+        func = lambda t: corrected[i,j] - fluorescence(t, w, n1, n2, n3, n4, phi, d_m)
         height[i,j] = fsolve(func, 0)
-height[height >120] = 34  
+height[height >120] =120
 fig, ax = plt.subplots(4,1, figsize=(16, 16))
 
 img = Image.fromarray(height)   # Creates a PIL-Image object
@@ -193,6 +123,80 @@ im = ax[3].imshow(height, cmap = 'inferno' )
 ax[3].axis( 'off')
 add_colorbar(im)
 plt.savefig('tiraf.pdf', format = 'pdf', dpi = 1000)
+
+'''
+
+#Wave vectors
+plt.figure(2)
+n4 = [1.35, 1.36,1.37, 1.39]
+t = np.linspace(0, 200)
+linestyle = [ 'dashed', 'dashdot', 'solid', 'dotted']
+
+for i in xrange(len(n4)):
+    F = fluorescence(t, w, n1, n2, n3, n4[i], phi, d_m)
+    plt.plot(t,F, c ='black', ls = linestyle[i], label= r'$n_4 = $'+ str(n4[i]))
+
+    
+plt.legend(loc =4)
+plt.xlabel('Distance t [nm]')
+plt.ylabel('Normed Fluorescence Intensity')
+plt.savefig('tiraf_different_n2.pdf', format ='pdf', dpi= 1000)
+
+# Wave vectors
+plt.figure(2)
+n3 = [1.41, 1.43,1.45, 1.47]
+t = np.linspace(0, 200)
+linestyle = [ 'dashed', 'dashdot', 'solid', 'dotted']
+
+for i in xrange(len(n3)):
+    F = fluorescence(t, w, n1, n2, n3[i], n4, phi, d_m)
+    plt.plot(t,F, c ='black', ls = linestyle[i], label= r'$n_3 = $'+ str(n3[i]))
+
+    
+plt.legend(loc =4)
+plt.xlabel('Distance t [nm]')
+plt.ylabel('Normed Fluorescence Intensity')
+plt.savefig('tiraf_different_n3.pdf', format ='pdf', dpi= 1000)
+# Wave vectors
+plt.figure(2)
+n2 = [1.3, 1.32,1.337, 1.37]
+t = np.linspace(0, 200)
+linestyle = [ 'dashed', 'dashdot', 'solid', 'dotted']
+
+for i in xrange(len(n2)):
+    F = fluorescence(t, w, n1, n2[i], n3, n4, phi, d_m)
+    plt.plot(t,F, c ='black', ls = linestyle[i], label= r'$n_2 = $'+ str(n2[i]))
+
+    
+plt.legend(loc =4)
+plt.xlabel('Distance t [nm]')
+plt.ylabel('Normed Fluorescence Intensity')
+plt.savefig('tiraf_different_n2.pdf', format ='pdf', dpi= 1000)
+
+# Wave vectors
+plt.figure(2)
+phi = [np.radians(70), np.radians(75),  np.radians(80), np.radians(85)]
+t = np.linspace(0, 200)
+linestyle = ['solid', 'dashed', 'dashdot', 'dotted']
+degree_sign= u'\N{DEGREE SIGN}'
+for i in xrange(len(phi)):
+    F = fluorescence(t, w, n1, n2, n3, n4, phi[i], d_m)
+    plt.plot(t,F, c ='black', ls = linestyle[i], label= str(int(np.rad2deg(phi[i]))) + r'$^{\circ}$')
+
+    
+plt.legend(loc =4)
+plt.xlabel('Distance t [nm]')
+plt.ylabel('Normed Fluorescence Intensity')
+plt.savefig('tiraf_different_phi.pdf', format ='pdf', dpi= 1000)
+
+plt.figure(1)
+t = np.linspace(0, 200)
+F = fluorescence(t, w, n1, n2, n3, n4, np.radians(72), d_m)
+
+plt.xlim((0,200))
+plt.ylim(0,1)
+plt.plot(t,F, c ='black',)
+plt.savefig('tiraf.pdf', format ='pdf', dpi= 1000)
 '''
 #t = np.linspace(np.min(height),250)
 #F = fluorescence(t, w, n1, n2, n3, n4, np.radians(75), d_m)
